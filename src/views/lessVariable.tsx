@@ -21,6 +21,7 @@ export default class LessVariable extends React.Component<any, any> {
     onChange = (e: any) => {
         const { darkTheme } = this.state;
         let newTheme = e.target.value;
+        // 调用 modifyVars 进行修改 less 变量
         (window as any).less
         .modifyVars(newTheme === 'dark' ? darkTheme : {})
         .then(() => {})
@@ -37,7 +38,7 @@ export default class LessVariable extends React.Component<any, any> {
         const { theme } = this.state;
         return (
             <Layout className="less-variable">
-                <h3>添加 less 变量进行主题切换</h3>
+                <h3>使用 less 变量进行主题切换</h3>
                 <div>
                     <span>当前主题：</span>
                     <Radio.Group value={theme} onChange={this.onChange}>
@@ -47,9 +48,9 @@ export default class LessVariable extends React.Component<any, any> {
                 </div>
                 <br />
                 <h3>优点：</h3>
-                <p>更改预设的 less 变量即可使得多处的样式同时变化，减少了很多 css 代码的编写</p>
+                <p>更改预设的 less 变量可使得多处的样式同时变化，减少了很多 css 代码的编写</p>
                 <h3>缺点：</h3>
-                <p>antd 提供的 less 变量有限，并不能满足某些样式更改的需求</p>
+                <p>antd 提供的 less 变量有限，并不能满足全部样式更改的需求</p>
             </Layout>
         )
     }

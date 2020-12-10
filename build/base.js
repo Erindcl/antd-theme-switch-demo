@@ -39,7 +39,7 @@ module.exports = function () {
                         test: splitChunksConfig.baseCommonRegExp,
                         priority: 1
                     },
-                    // 编写多套主题文件进行主题切换 相关配置 开始
+                    // 动态加载不同的主题文件进行主题切换 相关配置 开始
                     default: {
                         test: /[\\/]styles[\\/]theme[\\/]default.less/,
                         priority: 1
@@ -48,7 +48,7 @@ module.exports = function () {
                         test: /[\\/]styles[\\/]theme[\\/]dark.less/,
                         priority: 1
                     }
-                    // 编写多套主题文件进行主题切换 相关配置 结束
+                    // 动态加载不同的主题文件进行主题切换 相关配置 结束
                 }
             },
             runtimeChunk: {

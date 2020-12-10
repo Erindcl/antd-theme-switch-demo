@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Radio, Layout } from 'antd';
+// 导入所有的主题文件
 import '../styles/theme/default.less';
 import '../styles/theme/dark.less';
 
@@ -22,11 +23,11 @@ export default class MultipleFiles extends React.Component<any, any> {
 
     setLink = (currTheme: any) => {
         const disableTheme = currTheme === 'dark' ? 'default' : 'dark';
+        // 通过控制 link 标签的 disabled 属性进行样式加载的切换
+        // link 加载 css 需要 webpack 配置的配合
         const arr = document.getElementsByTagName('link');
-        console.log(arr)
         for (let i = 0, len = arr.length; i < len; i++) {
             let href = arr[i].getAttribute('href');
-            console.log(href)
             if (href && href.indexOf(disableTheme) !== -1) {
                 arr[i].disabled = true;
             }
@@ -40,7 +41,7 @@ export default class MultipleFiles extends React.Component<any, any> {
         const { theme } = this.state;
         return (
             <Layout className="multiple-files">
-                <h3>编写多套主题文件进行主题切换</h3>
+                <h3>动态加载不同的主题文件进行主题切换</h3>
                 <div>
                     <span>当前主题：</span>
                     <Radio.Group value={theme} onChange={this.onChange}>
