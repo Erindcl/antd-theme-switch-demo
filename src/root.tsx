@@ -3,9 +3,9 @@ import { Router } from 'react-router'
 import { Provider } from 'react-redux'
 
 // Styles
-// import './styles/main.scss'
+import './styles/main.less';
 
-import routers from './routers'
+import routers from './routers';
 
 export default class Root extends React.Component<any, any> {
     render () {
