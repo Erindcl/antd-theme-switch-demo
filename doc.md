@@ -1,6 +1,6 @@
 # 基于 ant-design 的网站主题切换功能的实现
 
-当下，越来越多的网站都提供了主题切换功能。于是，笔者怀着对该功能实现的好奇心，对各个网站进行一番探索，最后总结得出了这些切换主题的方案。笔者当前使用技术栈为 ant-design + react + webpack，故基于 ant-design 对网站主题切换功能实现进行介绍。以下为个人实践的一些方案，不对之处，欢迎纠正。
+当下，越来越多的网站都提供了主题切换功能。于是，笔者怀着对该功能实现的好奇心，对各个网站进行一番探索，最后总结得出了这些切换主题的方案。笔者当前使用技术栈为 ant-design + react + webpack，故在此基于 ant-design 对网站主题切换功能实现进行介绍。以下为个人实践的一些方案，不对之处，欢迎纠正。
 
 本文介绍的主题切换方案有三种：
 
@@ -9,14 +9,15 @@
 - 动态加载不同的主题文件
 
 特别说明：
+
 > 本文中主题切换只涉及默认主题和暗黑主题的切换，其他多套主题切换的实现，请自行拓展。
-> 代码实现只展示主要代码，示例全部代码，见 [github](https://github.com/Erindcl/theme-change-demo)
+> 代码实现只展示主要代码，示例全部代码，见 [github](https://github.com/Erindcl/theme-change-demo)。几个方案之间代码会相互影响，所以在进行单个方案的页面查看时，需要将其他方案的代码注释掉，否则可能无法查看切换效果。
 
 ## 最简单的主题切换方案 - 使用 css 命名空间
 
 添加 class 名称，在类名中添加对应主题样式。具体代码实现如下：
 
-```typescript
+```tsx
 // src/views/nameSpace.tsx
 import * as React from 'react';
 import { Radio } from 'antd';
@@ -40,7 +41,7 @@ export default class NameSpace extends React.Component<any, any> {
     render() {
         const { theme } = this.state;
         return (
-            /// 根据 theme 的值 进行 类名的切换 
+            // 根据 theme 的值 进行 类名的切换 
             <div className={theme === 'dark' ? 'name-space dark' : 'name-space'}>
                 <h3>添加 class 命名空间进行主题切换</h3>
                 <div>
@@ -63,10 +64,6 @@ export default class NameSpace extends React.Component<any, any> {
     background: #f2f7fa;
     height: 100%;
     overflow: hidden;
-    .ant-radio-inner::after {
-        top: 4px;
-        left: 4px;
-    }
     // 暗黑主题 样式
     &.dark {
         background: #0e0e17;
@@ -86,9 +83,9 @@ export default class NameSpace extends React.Component<any, any> {
 
 ## 使用 less 变量
 
-ant-design 官网有提供 [定制主题](https://ant.design/docs/react/customize-theme-cn) 方案。虽然这不能解决我们在线进行主题切换的问题，但是给我们提供了很好的启发，可以使用 less 提供的 modifyVars 的方式进行覆盖 less 变量。我们需要做的就是改变调用 modifyVars 方法的时机，即在用户点击切换主题的时候调用。并且，需要提供包含主题相关 less 变量及其值的 json。
+ant-design 官网有提供 [定制主题](https://ant.design/docs/react/customize-theme-cn) 方案。虽然这不能解决我们在线进行主题切换的问题，但是给我们提供了很好的启发，即可以使用 less 提供的 modifyVars 的方式进行覆盖 less 变量。我们需要做的就是调整调用 modifyVars 方法的时机，即在用户点击切换主题的时候调用。并且，需要提供包含主题相关 less 变量及其值的 json。
 
-除了以上，还有两点需要注意。
+此外，还有以下两点需要注意：
 
 1. 保证 less 的 modifyVars 方法可以调用，即注册到 window 对象上。
 2. 入口 HTML 文件引入的是使用了 less 变量的 less 文件，不能是已经经过 webpack 编译后的 css 文件。
@@ -129,7 +126,7 @@ ant-design 官网有提供 [定制主题](https://ant.design/docs/react/customiz
 
 使用 modifyVars 方法修改 less 变量的代码实现如下：
 
-```typescript
+```tsx
 // src/views/lessVariable.tsx
 import * as React from 'react';
 import { Radio, Layout, message } from 'antd';
@@ -139,6 +136,7 @@ export default class LessVariable extends React.Component<any, any> {
 
     state: any = {
         theme: 'default',
+        // 暗黑主题相关 less 变量特定值
         darkTheme: {
             '@radio-dot-color': '#11121C',
             '@layout-body-background': '#0e0e17',
@@ -147,9 +145,7 @@ export default class LessVariable extends React.Component<any, any> {
         }
     }
 
-    componentDidMount() {
-        
-    }
+    componentDidMount() {}
 
     onChange = (e: any) => {
         const { darkTheme } = this.state;
@@ -189,11 +185,11 @@ export default class LessVariable extends React.Component<any, any> {
 
 ## 动态加载不同的主题文件
 
-编写不同主题的问题，切换主题时切换加载的主题样式文件。通过该方法实现主题切换，需要以下三个步骤。
+该方案的主要思想是编写不同主题的问题，切换主题时切换加载的主题样式文件。通过该方案实现主题切换，需要以下三个步骤。
 
 ### 步骤一：准备不同的主题文件
 
-笔者准备三个样式文件，分别是 common.less、 default.less、 dark.less
+笔者准备了三个样式文件，分别是 common.less、 default.less、 dark.less
 
 - common.less：包含不同主题共有的样式
 - default.less：包含默认主题的样式
@@ -239,7 +235,7 @@ export default class LessVariable extends React.Component<any, any> {
 
 ### 步骤二：修改 webpack 配置
 
-不同主题的样式文件都需要导入，但是编译的时候，需要将不同主题的样式文件单独编译，便于我们后续进行动态切换加载的文件。其次，css 样式文件需要提取为外部代码，不能混合在 js 中一起被编译。相关 webpack 配置如下：
+在此方案实现中，不同主题的样式文件都需要导入，并且编译的时候，需要将不同主题的样式文件单独编译，便于我们后续进行动态切换加载的文件。其次，css 样式文件需要提取为外部代码，不能混合在 js 中一起被编译。相关 webpack 配置如下：
 
 ```javascript
 // build/base.js
@@ -286,9 +282,9 @@ plugins: [
 
 ### 步骤三：导入主题文件并实现动态加载
 
-导入不通的主题文件后，通过 webpack 打包，会在 head 标签中添加 link 标签引入所有的样式文件。此时，可以通过控制 link 标签的 disabled 属性进行样式加载的切换。代码实现如下：
+导入不同的主题文件后，通过 webpack 打包，会在 head 标签中添加 link 标签引入所有的样式文件。此时，可以通过控制 link 标签的 disabled 属性进行样式加载的切换。代码实现如下：
 
-```typescript
+```tsx
 //src/views/multipleFiles.tsx
 import * as React from 'react';
 import { Radio, Layout } from 'antd';
