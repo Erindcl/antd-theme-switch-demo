@@ -1,5 +1,5 @@
 {
-  "name": "theme-change-demo",
+  "name": "antd-theme-switch-demo",
   "version": "1.0.0",
   "description": "aShow hwo to change the website theme inline.",
   "main": "src/app.ts",
@@ -137,9 +137,9 @@
   "engines": {
     "node": ">=8.9.4"
   },
-  "repository": "https://github.com/Erindcl/theme-change-demo",
+  "repository": "https://github.com/Erindcl/antd-theme-switch-demo",
   "bugs": {
-    "url": "https://github.com/Erindcl/theme-change-demo/issues"
+    "url": "https://github.com/Erindcl/antd-theme-switch-demo/issues"
   },
   "config": {
   }
