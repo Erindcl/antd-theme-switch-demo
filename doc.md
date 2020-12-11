@@ -81,6 +81,10 @@ export default class NameSpace extends React.Component<any, any> {
 
 使用这种方式进行主题切换简单，便于实现，并且通俗易懂。但是需要我们手动编写全部的 css。特别的，antd 组件很多，需要挨个去查找组件类名再进行样式编写覆盖，开发量较大，对于开发量不大的主题样式切换，可以考虑使用该种方式。
 
+**效果预览：**
+
+![the first way](./src/public/class.gif)
+
 ## 使用 less 变量
 
 ant-design 官网有提供 [定制主题](https://ant.design/docs/react/customize-theme-cn) 方案。虽然这不能解决我们在线进行主题切换的问题，但是给我们提供了很好的启发，即可以使用 less 提供的 modifyVars 的方式进行覆盖 less 变量。我们需要做的就是调整调用 modifyVars 方法的时机，即在用户点击切换主题的时候调用。并且，需要提供包含主题相关 less 变量及其值的 json。
@@ -182,6 +186,10 @@ export default class LessVariable extends React.Component<any, any> {
 ```
 
 使用 modifyVars 方法更改预设的 less 变量可使得多处的样式(使用了 less 变量)同时变化，减少了很多 css 代码的编写。但是 antd 提供的 less 变量（[所有样式变量](https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less)）有限，并不能满足全部样式更改的需求，还是需要通过样式名去修改样式。
+
+**效果预览：**
+
+![the second way](./src/public/less.gif)
 
 ## 动态加载不同的主题文件
 
@@ -344,6 +352,10 @@ export default class MultipleFiles extends React.Component<any, any> {
 ```
 
 在 dark.less 文件中，可以看到，使用这种方式进行主题切换，对于可使用 less 变量的样式，直接使用 less 变量即可进行修改；其余样式，使用 antd 类名编写样式也可以进行覆盖。相较于前两种方案，在开发量庞大的项目中，使用这种方案进行主题切换是更好的选择。
+
+**效果预览：**
+
+![the third way](./src/public/files.gif)
 
 ## 附录
 
