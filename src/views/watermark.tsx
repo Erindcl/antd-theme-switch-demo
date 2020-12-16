@@ -29,7 +29,7 @@ export default class Watermark extends React.Component<any, any> {
             context.fillText('hide-watermark', 80, 150);
             const watermarkData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
             
-            this.mergeData(imageData, watermarkData.data, context, 'B');
+            this.mergeData(imageData, watermarkData, context, 'B');
             
             this.parsingData(imageData, context);
         }
@@ -37,6 +37,7 @@ export default class Watermark extends React.Component<any, any> {
 
     mergeData = (imageData: any, watermarkData: any, ctx: any, color: any) => {
         let oData = imageData.data;
+        let nData = watermarkData.data;
         let bit, offset;  // offset 的作用是找到 A 分量所在数组下标
 
         // 不同分量对应数组中的下标位置不同
@@ -59,14 +60,14 @@ export default class Watermark extends React.Component<any, any> {
             // 只处理目标分量
             if(i % 4 === bit){
                 // A 分量是否为 0 作为判断 所在像素有无像素信息 的依据
-                if(watermarkData[i + offset] === 0 && (oData[i] % 2 === 1)){
+                if(nData[i + offset] === 0 && (oData[i] % 2 === 1)){
                     // 去除没有信息的像素的干扰
                     if(oData[i] === 255){
                         oData[i]--;
                     } else {
                         oData[i]++;
                     }
-                } else if (watermarkData[i + offset] !== 0 && (oData[i] % 2 === 0)){
+                } else if (nData[i + offset] !== 0 && (oData[i] % 2 === 0)){
                     // 有信息的像素，目标分量值设为奇数
                     if(oData[i] === 255){
                         oData[i]--;
